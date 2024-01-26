@@ -14,7 +14,7 @@ router.post('/api/register', async (req, res) => {
     const user = new UserModel(req.body);
     await user.save();
     logToFile(`User ${req.body.name} created successfully!`)
-    mqttClient.publish('leaderboard', JSON.stringify(`New user signed up: ${req.body.name}`));
+    // mqttClient.publish('leaderboard', JSON.stringify(`New user signed up: ${req.body.name}`));
     res.status(201).json(user);
   } catch (error) {
     console.error('Error during registration:', error);
@@ -29,6 +29,7 @@ router.post('/api/login', async (req, res) => {
       if (user && await user.comparePassword(password)) {
         res.status(200).json("Success!");
         logToFile(`User ${email} logged in successfully!`)
+        // mqttClient.publish('leaderboard', JSON.stringify(`New user logged in: ${email}`));
       } else {
         res.status(401).json("Wrong password!");
       }
