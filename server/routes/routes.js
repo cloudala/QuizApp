@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const UserModel = require('../models/User');
 const mqtt = require('mqtt');
+const logToFile = require('../logger/logger')
 
 const mqttClient = mqtt.connect('mqtt://localhost:1883');
 mqttClient.on("connect", () => {
@@ -12,6 +13,7 @@ router.post('/api/register', async (req, res) => {
   try {
     const user = new UserModel(req.body);
     await user.save();
+    logToFile(`User ${req.body.name} created successfully!`)
     mqttClient.publish('leaderboard', JSON.stringify(`New user signed up: ${req.body.name}`));
     res.status(201).json(user);
   } catch (error) {
@@ -22,12 +24,11 @@ router.post('/api/register', async (req, res) => {
   
 router.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
-  
     try {
       const user = await UserModel.findOne({ email: email });
-  
       if (user && await user.comparePassword(password)) {
         res.status(200).json("Success!");
+        logToFile(`User ${email} logged in successfully!`)
       } else {
         res.status(401).json("Wrong password!");
       }
