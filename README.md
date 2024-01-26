@@ -1,1 +1,2 @@
 # QuizApp
+Alicja Chmura
