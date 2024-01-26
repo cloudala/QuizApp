@@ -1,14 +1,22 @@
 const express = require('express');
 const router = express.Router();
 const UserModel = require('../models/User');
+const mqtt = require('mqtt');
+
+const mqttClient = mqtt.connect('mqtt://localhost:1883');
+mqttClient.on("connect", () => {
+  console.log("Connected!")
+});
 
 router.post('/api/register', async (req, res) => {
   try {
     const user = new UserModel(req.body);
     await user.save();
+    mqttClient.publish('leaderboard', JSON.stringify(`New user signed up: ${req.body.name}`));
     res.status(201).json(user);
   } catch (error) {
-    res.status(500).json("Internal Server Error");
+    console.error('Error during registration:', error);
+    res.status(500).json({ error: "Internal Server Error", message: error.message });
   }
 });
   
