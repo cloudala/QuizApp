@@ -1,9 +1,16 @@
 import React from 'react'
+import SignUpForm from './components/SignUpForm'
+import LoginForm from './components/LogInForm'
+import {Routes, Route} from 'react-router-dom'
 
 export default function App() {
   return (
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
+    <>
+      <Routes>
+        <Route path='/' element={<h1>Home Page</h1>}/>
+        <Route path='/register' element={<SignUpForm/>}/>
+        <Route path='/login' element={<LoginForm/>}/>
+      </Routes>
+    </>
   )
 }
