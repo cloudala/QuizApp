@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('../db/connection');
 const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
 });
 
-// Hash the password before saving
+// Hashing the password before saving
 userSchema.pre('save', async function (next) {
   const user = this;
   if (!user.isModified('password')) return next();

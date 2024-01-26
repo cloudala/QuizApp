@@ -21,12 +21,10 @@ export default function LoginForm() {
     }),
     onSubmit: async (values, { resetForm }) => {
       try {
-        // Assuming values is an object that you want to send to the server
-        const response = await fetch('http://localhost:4000/api/login', {
+        const response = await fetch('https://localhost:4000/api/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            // Add any additional headers if needed
           },
           body: JSON.stringify(values),
         });
@@ -37,11 +35,9 @@ export default function LoginForm() {
           console.log('User logged in successfully!')
           navigate('/')
         }
-        // Reset the form after successful submission
         resetForm();
       } catch (error) {
         console.error('Error submitting form:', error.message);
-        // Handle the error as needed (e.g., display an error message to the user)
       }
     },
   });
@@ -53,8 +49,6 @@ export default function LoginForm() {
   return (
     <form className="max-w-md mx-auto mt-8 p-8 bg-gray-100 rounded" onSubmit={formik.handleSubmit}>
       <h1 className='font-semibold text-xl mb-3'>Login</h1>
-
-      {/* Email field */}
       <div className="mb-4">
         <input
           type="text"
@@ -89,8 +83,6 @@ export default function LoginForm() {
           <></>
         )}
       </div>
-
-      {/* Submit and Reset buttons */}
       <div className="flex items-center justify-between mb-4">
         <button
           type="button"
@@ -106,14 +98,10 @@ export default function LoginForm() {
           Login
         </button>
       </div>
-
-      {/* New section for signup message and button */}
       <div className="text-center">
         <p className="text-gray-600 text-sm">
           Don't have an account? <span className="text-blue-500">Sign Up</span>
         </p>
-        {/* Add your navigation logic for the "Sign Up" button */}
-        {/* For example, you can use React Router or trigger a function to handle the navigation */}
         <Link to={'/register'}>
           <button
             type="button"

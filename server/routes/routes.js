@@ -5,7 +5,7 @@ const mqtt = require('mqtt');
 
 const mqttClient = mqtt.connect('mqtt://localhost:1883');
 mqttClient.on("connect", () => {
-  console.log("Connected!")
+  console.log("Connected to HiveMQ Broker")
 });
 
 router.post('/api/register', async (req, res) => {
@@ -32,7 +32,8 @@ router.post('/api/login', async (req, res) => {
         res.status(401).json("Wrong password!");
       }
     } catch (error) {
-      res.status(500).json("Internal Server Error");
+      console.error('Error during login:', error);
+      res.status(500).json({ error: "Internal Server Error", message: error.message });
     }
 });
 

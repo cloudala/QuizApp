@@ -23,12 +23,10 @@ export default function SignUpForm() {
     }),
     onSubmit: async (values, { resetForm }) => {
       try {
-        // Assuming values is an object that you want to send to the server
-        const response = await fetch('http://localhost:4000/api/register', {
+        const response = await fetch('https://localhost:4000/api/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            // Add any additional headers if needed
           },
           body: JSON.stringify(values),
         });
@@ -39,11 +37,9 @@ export default function SignUpForm() {
           console.log('User registered successfully!')
           navigate('/login')
         }
-        // Reset the form after successful submission
         resetForm();
       } catch (error) {
         console.error('Error submitting form:', error.message);
-        // Handle the error as needed (e.g., display an error message to the user)
       }
     },
   });

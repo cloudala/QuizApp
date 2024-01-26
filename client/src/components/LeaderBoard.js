@@ -15,12 +15,10 @@ const Leaderboard = () => {
     mqttClient.on('message', (topic, message) => {
       if (topic === 'leaderboard') {
         console.log('Received leaderboard update:', JSON.parse(message.toString()));
-        // Update the leaderboard state
         setLeaderboard(prevLeaderboard => [...prevLeaderboard, JSON.parse(message.toString())]);
       }
     });
 
-    // Cleanup on component unmount
     return () => {
       mqttClient.end();
     };
