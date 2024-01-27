@@ -12,7 +12,7 @@ export default function QuizCard({quiz}) {
             <p className="text-black mb-2"><span className="font-semibold">Category: </span>{quiz.categoryName}</p>
             <p className="text-black mb-3">{quiz.questions} Questions</p>
             <div className="flex gap-3">
-                <Link to={`/quizzes/${quiz.id}`}><SolveQuizButton text='Solve Quiz'/></Link>
+                {user ? <Link to={`/quizzes/${quiz.id}`}><SolveQuizButton text='Solve Quiz'/></Link> : <p>You have to be logged in to solve quiz</p>}
                 {user && <FavouriteQuizButton text='Favourite' quizId={quiz.id} userId={user.id}/>}
             </div>
         </div>

@@ -1,5 +1,6 @@
 import React from 'react'
 import Navbar from './components/NavBar';
+import Footer from './components/Footer';
 import SignUpForm from './components/SignUpForm'
 import LoginForm from './components/LogInForm'
 import HomePage from './pages/HomePage';
@@ -22,6 +23,7 @@ export default function App() {
         <Route path='/reactions' element={<ReactionPage/>} />
         <Route path='/reactions-notif' element={<UserReactionNotification/>} />
       </Routes>
+      <Footer/>
     </>
   )
 }
