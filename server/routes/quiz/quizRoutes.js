@@ -4,6 +4,12 @@ const QuizModel = require('../../models/Quiz');
 const CategoryModel = require('../../models/Category');
 const uuid = require('uuid');
 const logToFile = require('../../logger/logger');
+const mqtt = require('mqtt');
+
+const mqttClient = mqtt.connect('mqtt://localhost:1883');
+mqttClient.on("connect", () => {
+  console.log("Connected to HiveMQ Broker from quizRoutes.js")
+});
 
 // Getting all quizzes
 router.get('/api/quizzes', async (req, res) => {
@@ -93,7 +99,7 @@ router.post('/api/quizzes', async (req, res) => {
       });
   
       const savedQuiz = await newQuiz.save();
-  
+      mqttClient.publish('quiz-updates', JSON.stringify(`Quiz ${savedQuiz.title} just got added!`));
       res.status(201).json(savedQuiz);
     } catch (error) {
       console.error('Error adding quiz:', error);
@@ -107,6 +113,7 @@ router.patch('/api/quizzes/:id', async (req, res) => {
     const { title, category, questions } = req.body;
   
     try {
+      const quiz = await QuizModel.findOne({ id: quizId })
       const updatedQuiz = await QuizModel.findOneAndUpdate(
         { id: quizId },
         { $set: { title, category, questions } },
@@ -116,7 +123,7 @@ router.patch('/api/quizzes/:id', async (req, res) => {
       if (!updatedQuiz) {
         return res.status(404).json({ error: 'Quiz not found', message: `Quiz with ID ${quizId} not found.` });
       }
-  
+      mqttClient.publish('quiz-updates', JSON.stringify(`Quiz ${quiz.title} just got updated!`));
       res.status(200).json(updatedQuiz);
     } catch (error) {
       console.error('Error updating quiz:', error);
@@ -129,12 +136,13 @@ router.delete('/api/quizzes/:id', async (req, res) => {
     const quizId = req.params.id;
   
     try {
+      const quiz = await QuizModel.findOne({ id: quizId })
       const deletionResult = await QuizModel.deleteOne({ id: quizId });
   
       if (deletionResult.deletedCount === 0) {
         return res.status(404).json({ error: 'Quiz not found', message: `Quiz with ID ${quizId} not found.` });
       }
-  
+      mqttClient.publish('quiz-updates', JSON.stringify(`Quiz ${quiz.title} just got deleted!`));
       res.status(200).json({ message: 'Quiz deleted successfully' });
     } catch (error) {
       console.error('Error deleting quiz:', error);

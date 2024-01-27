@@ -20,7 +20,15 @@ router.use(quizRoutes)
 // Registering a user
 router.post('/api/register', async (req, res) => {
   try {
-    const user = new UserModel(req.body);
+    const { name, email, password } = req.body;
+    const user = new UserModel({
+      email,
+      password,
+      id: uuid.v4(),
+      correctAnswers: 0,
+      favourite: '',
+      history: []
+    });
     await user.save();
     logToFile(`User ${req.body.name} created successfully!`)
     // mqttClient.publish('leaderboard', JSON.stringify(`New user signed up: ${req.body.name}`));
@@ -47,6 +55,88 @@ router.post('/api/login', async (req, res) => {
       console.error('Error during login:', error);
       res.status(500).json({ error: "Internal Server Error", message: error.message });
     }
+});
+
+// Getting user info
+router.get('/api/users/:id', async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await UserModel.findOne({ id: userId }, {_id: 0, __v: 0});
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found', message: `User with ID ${userId} not found.` });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error('Error getting user information:', error);
+    res.status(500).json({ error: 'Internal Server Error', message: error.message });
+  }
+});
+
+// Deleting a user
+router.delete('/api/users/:id', async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const result = await UserModel.deleteOne({ id: userId });
+
+    if (result.deletedCount === 1) {
+      res.status(200).json({ message: 'User deleted successfully' });
+    } else {
+      res.status(404).json({ error: 'Not Found', message: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    res.status(500).json({ error: 'Internal Server Error', message: error.message });
+  }
+});
+
+// Deleting a user's history
+router.delete('/api/users/:id/history', async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await UserModel.findOne({ id: userId });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found', message: `User with ID ${userId} not found.` });
+    }
+
+    user.history = [];
+    await user.save();
+
+    res.status(200).json({ message: `History for user with ID ${userId} deleted successfully.` });
+  } catch (error) {
+    console.error('Error deleting user history:', error);
+    res.status(500).json({ error: 'Internal Server Error', message: error.message });
+  }
+});
+
+// Updating a user's favourite quiz
+router.patch('/api/users/:id/favourite', async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { favourite } = req.body;
+    const user = await UserModel.findOne({ id: userId });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found', message: `User with ID ${userId} not found.` });
+    }
+
+    user.favourite = favourite;
+    await user.save();
+
+    res.status(200).json({ message: `Favorite quiz for user with ID ${userId} updated successfully.` });
+  } catch (error) {
+    console.error('Error updating user favorite quiz:', error);
+    res.status(500).json({ error: 'Internal Server Error', message: error.message });
+  }
+});
+
+// Quiz answer endpoints
+router.post('/api/quizzes/:id/submit', async (req, res) => {
+  const quizId = req.params.id;
+  const userAnswers = req.body.answers;
+  res.status(200).json({ score: calculatedScore, feedback: userFeedback });
 });
 
 module.exports = router;

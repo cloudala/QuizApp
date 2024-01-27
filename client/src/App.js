@@ -4,6 +4,7 @@ import LoginForm from './components/LogInForm'
 import HomePage from './pages/HomePage';
 import ReactionPage from './pages/ReactionPage';
 import UserReactionNotification from './components/UserReactionNotification';
+import LeaderBoard from './components/LeaderBoard';
 import {Routes, Route} from 'react-router-dom'
 
 export default function App() {
@@ -13,7 +14,7 @@ export default function App() {
         <Route path='/' element={<HomePage/>}/>
         <Route path='/register' element={<SignUpForm/>}/>
         <Route path='/login' element={<LoginForm/>}/>
-        <Route path='/leaderboard' element={<h1>Leaderboard</h1>} />
+        <Route path='/leaderboard' element={<LeaderBoard/>} />
         <Route path='/reactions' element={<ReactionPage/>} />
         <Route path='/reactions-notif' element={<UserReactionNotification/>} />
       </Routes>
