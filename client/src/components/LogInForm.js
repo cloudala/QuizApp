@@ -1,9 +1,12 @@
+import React, {useContext} from 'react'
 import { useFormik } from 'formik';
 import ErrorMessage from './ErrorMessage';
 import * as Yup from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
+import { UserContext } from '../contexts/UserContext';
 
 export default function LoginForm() {
+  const {user, setUser} = useContext(UserContext)
   const navigate = useNavigate()
   const formik = useFormik({
     initialValues: {
@@ -32,8 +35,14 @@ export default function LoginForm() {
         if (!response.ok) {
           throw new Error(`Server error: ${response.status} ${response.statusText}`);
         } else {
+          const {id} = await response.json()
+          console.log(id)
+          const userDataResponse = await fetch(`https://localhost:4000/api/users/${id}`);
+          const userData = await userDataResponse.json();
+          console.log(userData)
+          setUser(userData)
           console.log('User logged in successfully!')
-          navigate('/')
+          navigate('/quizzes')
         }
         resetForm();
       } catch (error) {

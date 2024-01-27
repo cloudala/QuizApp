@@ -32,7 +32,7 @@ router.post('/api/login', async (req, res) => {
       try {
         const user = await UserModel.findOne({ email: email });
         if (user && await user.comparePassword(password)) {
-          res.status(200).json("Success!");
+          res.status(200).json({id: user.id});
           logToFile(`User ${email} logged in successfully!`)
           // mqttClient.publish('leaderboard', JSON.stringify(`New user logged in: ${email}`));
         } else {

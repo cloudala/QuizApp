@@ -35,7 +35,7 @@ export default function SignUpForm() {
           throw new Error(`Server error: ${response.status} ${response.statusText}`);
         } else {
           console.log('User registered successfully!')
-          navigate('/login')
+          navigate('/')
         }
         resetForm();
       } catch (error) {
@@ -118,7 +118,7 @@ export default function SignUpForm() {
         <p className="text-gray-600 text-sm">
           Already have an account? <span className="text-blue-500">Log In</span>
         </p>
-        <Link to={'/login'}>
+        <Link to={'/'}>
             <button
             type="button"
             className="text-blue-500 hover:underline focus:outline-none"
