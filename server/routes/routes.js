@@ -1,7 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const categoryRoutes = require('./category/categoryRoutes')
+const quizRoutes = require('./quiz/quizRoutes')
 const UserModel = require('../models/User');
+const QuizModel = require('../models/Quiz');
+const CategoryModel = require('../models/Category');
 const mqtt = require('mqtt');
+const uuid = require('uuid');
 const logToFile = require('../logger/logger')
 
 const mqttClient = mqtt.connect('mqtt://localhost:1883');
@@ -9,6 +14,10 @@ mqttClient.on("connect", () => {
   console.log("Connected to HiveMQ Broker")
 });
 
+router.use(categoryRoutes)
+router.use(quizRoutes)
+
+// Registering a user
 router.post('/api/register', async (req, res) => {
   try {
     const user = new UserModel(req.body);
@@ -22,6 +31,7 @@ router.post('/api/register', async (req, res) => {
   }
 });
   
+// Logging in a user
 router.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
     try {
