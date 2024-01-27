@@ -10,7 +10,7 @@ export default function HomePage() {
     const {user, setUser} = useContext(UserContext)
     const { quizzes, loading, error, fetchData } = useContext(QuizContext);
     return (
-        <>
+        <div className='min-h-screen'>
           <UserData user={user}/>
           {loading ? (
             <Loading/>
@@ -28,6 +28,6 @@ export default function HomePage() {
           ) : (
             <p>Error fetching data</p>
           )}
-        </>
+        </div>
       );
 }

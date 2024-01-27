@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { CategoryProvider } from './contexts/CategoryContext';
 import { QuizProvider } from './contexts/QuizContext'
 import { UserProvider } from './contexts/UserContext'
 import { BrowserRouter } from 'react-router-dom'
@@ -14,22 +15,24 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
     <UserProvider>
-      <QuizProvider>
-        <App />
-        <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        transition={{ type: 'Bounce' }}
-        />
-        </QuizProvider>
+      <CategoryProvider>
+        <QuizProvider>
+          <App />
+          <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          transition={{ type: 'Bounce' }}
+          />
+          </QuizProvider>
+        </CategoryProvider>
       </UserProvider>
     </BrowserRouter>
   </React.StrictMode>

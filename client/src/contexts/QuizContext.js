@@ -8,6 +8,10 @@ export const QuizProvider = ({ children }) => {
     );
     
     const [quizzes, setQuizzes] = useState([]);
+    
+    const updateQuizzes = async (newQuizData) => {
+      setQuizzes(newQuizData);
+    };
 
     useEffect(() => {
       if (!loading && !error) {
@@ -22,7 +26,8 @@ export const QuizProvider = ({ children }) => {
         setQuizzes,
         loading,
         error,
-        fetchData
+        fetchData,
+        updateQuizzes
         }}
     >
         {children}
