@@ -1,8 +1,12 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import { QuizContext } from "../contexts/QuizContext";
+import UpdateUserForm from "./UpdateUserForm";
+import UpdateUserButton from "./UpdateUserButton";
+import DeleteUserButton from "./DeleteUserButton";
 import DeleteHistoryButton from "./DeleteHistoryButton";
 
 export default function UserData({ user }) {
+  const [editUser, setEditUser] = useState(false)
   const { quizzes } = useContext(QuizContext);
   const favouriteQuizTitle =
     user && quizzes && user.favourite
@@ -11,8 +15,17 @@ export default function UserData({ user }) {
 
   return user ? (
     <div className="w-full my-8 p-4 bg-white rounded-md shadow-md">
-      <h1 className="text-3xl font-semibold mb-4">Your User Dashboard</h1>
+      <div className="flex gap-2">
+        <h1 className="text-3xl font-semibold mb-4">Your User Dashboard</h1>
+        <UpdateUserButton text="Update Account" editUser={editUser} setEditUser={setEditUser}/>
+        <DeleteUserButton text="Delete Account" userId={user.id}/>
+      </div>
+      {editUser &&  <UpdateUserForm user={user}/>}
       <div className="grid grid-cols-2 gap-4">
+        <div>
+          <p className="text-lg font-semibold">Name:</p>
+          <p className="text-gray-800">{user.name}</p>
+        </div>
         <div>
           <p className="text-lg font-semibold">Email:</p>
           <p className="text-gray-800">{user.email}</p>

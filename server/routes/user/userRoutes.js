@@ -10,6 +10,7 @@ router.post('/api/register', async (req, res) => {
       const { name, email, password } = req.body;
       const user = new UserModel({
         email,
+        name,
         password,
         id: uuid.v4(),
         correctAnswers: 0,
@@ -117,6 +118,30 @@ router.patch('/api/users/:id/favourite', async (req, res) => {
       console.error('Error updating user favorite quiz:', error);
       res.status(500).json({ error: 'Internal Server Error', message: error.message });
     }
+});
+
+// Updating a user's data
+router.patch('/api/users/:id', async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { name, email, password } = req.body;
+    const user = await UserModel.findOne({ id: userId });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found', message: `User with ID ${userId} not found.` });
+    }
+
+    if (name) user.name = name;
+    if (email) user.email = email;
+    if (password) user.password = password;
+
+    await user.save();
+
+    res.status(200).json({ message: `User with ID ${userId} updated successfully.` });
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).json({ error: 'Internal Server Error', message: error.message });
+  }
 });
 
 module.exports = router
