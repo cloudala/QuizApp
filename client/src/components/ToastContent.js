@@ -3,7 +3,7 @@ export default function ToastContent({ emojiUrl, user, quizTitle }) {
     return (
         <span className="flex items-center">
             <div>
-            <span className='font-semibold text-l'>User: {emojiUrl.user.name} reacted to Quiz: "{emojiUrl.quizTitle}" with:</span>
+            <span className='font-semibold text-l'>{emojiUrl.user.name} reacted to "{emojiUrl.quizTitle}"</span>
             </div>
             <img alt="Emoji" style={{ width: '30px'}} src={emojiUrl.emojiCode} />
         </span>

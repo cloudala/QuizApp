@@ -3,7 +3,13 @@ const router = express.Router();
 const QuizModel = require('../../models/Quiz');
 const UserModel = require('../../models/User');
 const uuid = require('uuid');
-const logToFile = require('../../logger/logger')
+const logToFile = require('../../logger/logger');
+const mqtt = require('mqtt');
+
+const mqttClient = mqtt.connect('mqtt://localhost:1883');
+mqttClient.on("connect", () => {
+  console.log("Connected to HiveMQ Broker from answerRoutes.js")
+});
 
 // Helper function to calculate the score
 function calculateScore(questions, userAnswers) {
@@ -43,6 +49,7 @@ router.post('/api/quizzes/:id/submit', async (req, res) => {
   
       user.correctAnswers = (user.correctAnswers || 0) + calculatedScore;
       await user.save();
+      mqttClient.publish('leaderboard', JSON.stringify({userId: user.id, userName: user.name, correctAnswers: user.correctAnswers}));
       res.status(200).json({ score: calculatedScore, feedback: 'Your quiz submission was successful.' });
     } catch (error) {
       console.error('Error submitting quiz:', error);

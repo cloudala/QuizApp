@@ -1,40 +1,25 @@
-import React, { useEffect } from 'react';
-import mqtt from 'mqtt';
-import { toast, Bounce } from 'react-toastify';
+import React from 'react';
 
-export default function LeaderBoard() {
-  useEffect(() => {
-    const mqttClient = mqtt.connect('ws://localhost:8000/mqtt');
-
-    mqttClient.on('connect', () => {
-      console.log('Connected to MQTT broker');
-      mqttClient.subscribe('quiz-updates');
-    });
-
-    mqttClient.on('message', (topic, message) => {
-      if (topic === 'quiz-updates') {
-        const quizUpdate = JSON.parse(message.toString());
-        toast.info(`${quizUpdate}`, {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
-      }
-    });
-
-    return () => {
-      mqttClient.end();
-    };
-  }, []);
-
+function LeaderBoard({ leaderboard, updateLeaderboard }) {
   return (
-    <div>
+    leaderboard && 
+    <div className="bg-gray-100 p-4 rounded-md shadow-md">
+      <h2 className="text-2xl font-bold mb-4">Leaderboard</h2>
+      <ul>
+        {leaderboard.map((user, index) => (
+          <li
+            key={index}
+            className="flex items-center justify-between bg-white p-2 mb-2 rounded-md shadow-sm"
+          >
+            <span className="text-lg">{user.userName}</span>
+            <span className="text-lg font-semibold text-green-500">
+              {user.correctAnswers} correct answers
+            </span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
-};
+}
+
+export default LeaderBoard;

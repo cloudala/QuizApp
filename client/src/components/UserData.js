@@ -8,10 +8,11 @@ import DeleteHistoryButton from "./DeleteHistoryButton";
 export default function UserData({ user }) {
   const [editUser, setEditUser] = useState(false)
   const { quizzes } = useContext(QuizContext);
-  const favouriteQuizTitle =
-    user && quizzes && user.favourite
-      ? quizzes.find((quiz) => quiz.id === user.favourite)?.title || "Unknown Quiz"
-      : null;
+  const favouriteQuiz =
+  user && quizzes && user.favourite
+    ? quizzes.find((quiz) => quiz.id === user.favourite)
+    : null;
+  const favouriteQuizTitle = favouriteQuiz && favouriteQuiz.title ? favouriteQuiz.title : "Unknown Quiz";
 
   return user ? (
     <div className="w-full my-8 p-4 bg-white rounded-md shadow-md">
@@ -49,11 +50,20 @@ export default function UserData({ user }) {
       </div>
       {user.history && user.history.length > 0 ? (
         <ul className="list-disc pl-6">
-          {user.history.map((attempt, id) => (
-            <li key={id} className="mb-2">
-              {quizzes.find((quiz) => quiz.id === attempt.id).title} - Result: {attempt.result}, Timestamp: {attempt.timestamp}
-            </li>
-          ))}
+           {user.history.map((attempt, id) => {
+            const quiz = quizzes.find((quiz) => quiz.id === attempt.id);
+            return (
+              <li key={id} className="mb-2">
+                {quiz ? (
+                  <>
+                    {quiz.title} - Result: {attempt.result}, Timestamp: {attempt.timestamp}
+                  </>
+                ) : (
+                  <>Unknown Quiz - Result: {attempt.result}, Timestamp: {attempt.timestamp}</>
+                )}
+              </li>
+            );
+          })}
         </ul>
       ) : (
         <p className="text-gray-800">No quiz history available.</p>

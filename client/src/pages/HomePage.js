@@ -5,12 +5,14 @@ import QuizSearch from '../components/QuizSearch';
 import QuizList from '../components/QuizList'
 import Loading from '../components/Loading';
 import UserData from '../components/UserData';
+import LeaderBoard from '../components/LeaderBoard';
 
-export default function HomePage() {
+export default function HomePage({leaderboard, updateLeaderboard}) {
     const {user, setUser} = useContext(UserContext)
     const { quizzes, loading, error, fetchData } = useContext(QuizContext);
     return (
         <div className='min-h-screen'>
+          <LeaderBoard leaderboard={leaderboard} updateLeaderboard={updateLeaderboard}/>
           <UserData user={user}/>
           {loading ? (
             <Loading/>
