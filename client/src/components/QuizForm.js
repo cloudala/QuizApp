@@ -152,7 +152,7 @@ const QuizForm = () => {
             <button
               type="button"
               onClick={() => handleRemoveQuestion(index)}
-              className="mt-4 bg-red-500 text-white px-4 py-2 rounded-md"
+              className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center h-10"
             >
               Remove Question
             </button>
@@ -163,14 +163,14 @@ const QuizForm = () => {
           <button
             type="button"
             onClick={handleAddQuestion}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md h-10"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
             Add Question
           </button>
 
           <button
             type="submit"
-            className="bg-green-500 text-white px-4 py-2 rounded-md"
+            className="bg-green-500 text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
             Add New Quiz
           </button>
