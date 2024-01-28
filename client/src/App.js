@@ -7,6 +7,8 @@ import HomePage from './pages/HomePage';
 import ReactionPage from './pages/ReactionPage';
 import QuizPage from './pages/QuizPage';
 import CategoriesPage from './pages/CategoriesPage';
+import ManageQuizPage from './pages/ManageQuizPage';
+import EditQuizPage from './pages/EditQuizPage';
 import UserReactionNotification from './components/UserReactionNotification';
 import LeaderBoard from './components/LeaderBoard';
 import {Routes, Route} from 'react-router-dom'
@@ -21,6 +23,8 @@ export default function App() {
         <Route path='/categories' element={<CategoriesPage/>}/>
         <Route path='/quizzes' element={<HomePage/>}/>
         <Route path='/quizzes/:id' element={<QuizPage/>}/>
+        <Route path='/quizzes/manage' element={<ManageQuizPage/>}/>
+        <Route path='/quizzes/manage/:id' element={<EditQuizPage/>}/>
         <Route path='/leaderboard' element={<LeaderBoard/>} />
         <Route path='/reactions' element={<ReactionPage/>} />
         <Route path='/reactions-notif' element={<UserReactionNotification/>} />

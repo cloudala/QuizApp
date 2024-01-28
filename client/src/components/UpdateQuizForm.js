@@ -1,12 +1,41 @@
 import React, { useState, useEffect, useContext } from 'react';
-import {CategoryContext} from '../contexts/CategoryContext'
+import { CategoryContext } from '../contexts/CategoryContext';
 import { QuizContext } from '../contexts/QuizContext';
 import { useFormik } from 'formik';
 
-const QuizForm = () => {
-  const {categories: initialCategories} = useContext(CategoryContext)
+const UpdateQuizForm = ({ quizId }) => {
+  const { categories: initialCategories } = useContext(CategoryContext);
+  const { updateQuizzes } = useContext(QuizContext);
   const [categories, setCategories] = useState(initialCategories);
-  const {updateQuizzes} = useContext(QuizContext)
+  const [quizData, setQuizData] = useState(null);
+
+  useEffect(() => {
+    const fetchQuiz = async () => {
+      try {
+        const response = await fetch(`https://localhost:4000/api/quizzes/${quizId}`);
+        if (!response.ok) {
+          console.error('Failed to fetch quiz');
+          return null;
+        }
+        const quizData = await response.json();
+        console.log('Fetched Quiz Data:', quizData);
+        return quizData;
+      } catch (error) {
+        console.error('Error fetching quiz:', error);
+        return null;
+      }
+    };
+
+    const loadQuizData = async () => {
+      const data = await fetchQuiz();
+      if (data) {
+        console.log(data.quiz)
+        setQuizData(data.quiz);
+      }
+    };
+
+    loadQuizData();
+  }, [quizId]);
 
   const formik = useFormik({
     initialValues: {
@@ -14,11 +43,11 @@ const QuizForm = () => {
       categoryId: '',
       questions: [{ text: '', options: ['', '', ''], correctOption: 0 }],
     },
-    onSubmit: async (values, {resetForm}) => {
+    onSubmit: async (values, { resetForm }) => {
       console.log('Form submitted:', values);
       try {
-        const response = await fetch('https://localhost:4000/api/quizzes', {
-          method: 'POST',
+        const response = await fetch(`https://localhost:4000/api/quizzes/${quizId}`, {
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -26,23 +55,35 @@ const QuizForm = () => {
             title: values.title,
             category: values.categoryId,
             questions: values.questions,
-          })
+          }),
         });
-  
+
         if (!response.ok) {
-          console.error('Failed to add quiz');
+          console.error('Failed to update quiz');
         } else {
-          const newQuizzesResponse = await fetch(`https://localhost:4000/api/quizzes`);
-          const newQuizzes = await newQuizzesResponse.json()
-          updateQuizzes(newQuizzes.quizzes)
-          console.log(`Quiz added successfully`);
+          const updatedQuizzesResponse = await fetch(`https://localhost:4000/api/quizzes`);
+          const updatedQuizzes = await updatedQuizzesResponse.json();
+          updateQuizzes(updatedQuizzes.quizzes);
+          console.log('Quiz updated successfully');
         }
         resetForm();
-      } catch(error) {
-        console.error("Error adding quiz:", error);
+      } catch (error) {
+        console.error('Error updating quiz:', error);
       }
     },
   });
+
+  useEffect(() => {
+    if (quizData) {
+      formik.setValues({
+        title: quizData.title || '',
+        categoryId: quizData.categoryId || '',
+        questions: Array.isArray(quizData.questions)
+          ? quizData.questions
+          : [{ text: '', options: ['', '', ''], correctOption: 0 }],
+      });
+    }
+  }, [quizData]);
 
   const handleAddQuestion = () => {
     formik.setValues({
@@ -172,7 +213,7 @@ const QuizForm = () => {
             type="submit"
             className="bg-green-500 text-white px-4 py-2 rounded-md"
           >
-            Add New Quiz
+            Update Quiz
           </button>
         </div>
       </form>
@@ -180,4 +221,4 @@ const QuizForm = () => {
   );
 };
 
-export default QuizForm;
+export default UpdateQuizForm;

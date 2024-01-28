@@ -51,7 +51,7 @@ export default function UserData({ user }) {
         <ul className="list-disc pl-6">
           {user.history.map((attempt, id) => (
             <li key={id} className="mb-2">
-              {attempt.id} - Result: {attempt.result}, Timestamp: {attempt.timestamp}
+              {quizzes.find((quiz) => quiz.id === attempt.id).title} - Result: {attempt.result}, Timestamp: {attempt.timestamp}
             </li>
           ))}
         </ul>

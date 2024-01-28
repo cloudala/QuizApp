@@ -70,11 +70,12 @@ router.get('/api/quizzes/:id', async (req, res) => {
       if (!quiz) {
         return res.status(404).json({ error: 'Quiz not found', message: 'The specified quiz ID does not exist.' });
       }
+      const category = await CategoryModel.findOne({id: quiz.category}, { _id: 0});
   
       const quizWithCategoryName = {
         id: quiz.id,
         title: quiz.title,
-        categoryName: quiz.category ? quiz.category.name : 'Unknown Category',
+        categoryId: category ? category.id : '',
         questions: quiz.questions,
       };
   
