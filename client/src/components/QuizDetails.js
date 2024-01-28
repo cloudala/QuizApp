@@ -55,6 +55,10 @@ const QuizDetails = ({ quiz, userId, updateUser }) => {
     onSubmit,
   });
 
+  const handleReset = () => {
+    formik.resetForm();
+  };
+
   return (
     <div className="max-w-lg mx-auto mt-8 p-4 bg-white rounded-md shadow-md">
       <EmojiPicker user={user} quizTitle={quiz.title}/>
@@ -83,12 +87,21 @@ const QuizDetails = ({ quiz, userId, updateUser }) => {
             )}
           </div>
         ))}
-        <button
-          type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
-        >
-          Submit
-        </button>
+        <div className="flex justify-between">
+          <button
+            type="button"
+            onClick={handleReset}
+            className="text-blue-800 bg-blue-100 hover:bg-blue-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center h-10 w-24"
+          >
+            Reset
+          </button>
+          <button
+            type="submit"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          >
+            Submit Answers
+          </button>
+        </div>
       </form>
       <h1 className="font-semibold text-2xl my-3">Your score: {quizResult} / {quiz.questions.length}</h1>
     </div>
