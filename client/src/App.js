@@ -11,11 +11,37 @@ import QuizPage from './pages/QuizPage';
 import CategoriesPage from './pages/CategoriesPage';
 import ManageQuizPage from './pages/ManageQuizPage';
 import EditQuizPage from './pages/EditQuizPage';
-import LeaderBoard from './components/LeaderBoard';
 import {Routes, Route} from 'react-router-dom'
 
 export default function App() {
+  const [activeUsers, setActiveUsers] = useState([]);
   const [leaderboard, setLeaderboard] = useState([]);
+
+  const updateActiveUsers = (prevActiveUsers, userUpdate) => {
+    const updatedActiveUsers = [...prevActiveUsers];
+    if (userUpdate.logout) {
+      const remainingUsers = updatedActiveUsers.filter(
+        (user) => user.userId !== userUpdate.userId
+      );
+
+      return remainingUsers;
+    }
+
+    const existingUserIndex = updatedActiveUsers.findIndex(
+      (user) => user.userId === userUpdate.userId
+    );
+  
+    if (existingUserIndex !== -1) {
+      updatedActiveUsers[existingUserIndex].time = userUpdate.time;
+    } else {
+      updatedActiveUsers.push({
+        userId: userUpdate.userId,
+        userName: userUpdate.userName,
+        time: userUpdate.currentTime.toString(),
+      });
+    }
+    return updatedActiveUsers;
+  };
 
   const updateLeaderboard = (prevLeaderboard, userUpdate) => {
     const updatedLeaderboard = [...prevLeaderboard];
@@ -44,6 +70,7 @@ export default function App() {
     mqttClient.on('connect', () => {
       console.log('Connected to MQTT broker');
       mqttClient.subscribe('leaderboard');
+      mqttClient.subscribe('active-users');
       mqttClient.subscribe('user-reactions');
       mqttClient.subscribe('quiz-updates');
     });
@@ -52,6 +79,14 @@ export default function App() {
       if (topic === 'leaderboard') {
         const userUpdate = JSON.parse(message.toString());
         setLeaderboard((prevLeaderboard) => updateLeaderboard(prevLeaderboard, userUpdate));
+      }
+
+      if (topic === 'active-users') {
+        const data = JSON.parse(message.toString())
+        const activeUser = data.userName;
+        const currentTime = data.currentTime;
+        console.log(activeUser, currentTime);
+        setActiveUsers((prevActiveUsers) => updateActiveUsers(prevActiveUsers, data));
       }
 
       if (topic === 'user-reactions') {
@@ -98,7 +133,7 @@ export default function App() {
         <Route path='/' element={<LoginForm/>}/>
         <Route path='/register' element={<SignUpForm/>}/>
         <Route path='/categories' element={<CategoriesPage/>}/>
-        <Route path='/quizzes' element={<HomePage leaderboard={leaderboard} updateLeaderboard={updateLeaderboard}/>}/>
+        <Route path='/quizzes' element={<HomePage leaderboard={leaderboard} updateLeaderboard={updateLeaderboard} activeUsers={activeUsers} updateActiveUsers={updateActiveUsers}/>}/>
         <Route path='/quizzes/:id' element={<QuizPage/>}/>
         <Route path='/quizzes/manage' element={<ManageQuizPage/>}/>
         <Route path='/quizzes/manage/:id' element={<EditQuizPage/>}/>

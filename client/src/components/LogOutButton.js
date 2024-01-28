@@ -1,12 +1,15 @@
 import React, {useContext} from 'react'
 import { useNavigate } from "react-router-dom"
 import {UserContext} from '../contexts/UserContext'
+import mqtt from 'mqtt';
 
 export default function LogOutButton() {
-    const {setUser} = useContext(UserContext)
+    const {user, setUser} = useContext(UserContext)
     const navigate = useNavigate()
 
     function handleButtonClick() {
+        const mqttClient = mqtt.connect('ws://localhost:8000/mqtt');
+        mqttClient.publish('active-users', JSON.stringify({ logout: true, userId: user.id }));
         setUser(null)
         navigate('/')
     }

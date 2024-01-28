@@ -3,6 +3,12 @@ const router = express.Router();
 const UserModel = require('../../models/User');
 const uuid = require('uuid');
 const logToFile = require('../../logger/logger')
+const mqtt = require('mqtt');
+
+const mqttClient = mqtt.connect('mqtt://localhost:1883');
+mqttClient.on("connect", () => {
+  console.log("Connected to HiveMQ Broker from userRoutes.js")
+});
 
 // Registering a user
 router.post('/api/register', async (req, res) => {
@@ -34,8 +40,9 @@ router.post('/api/login', async (req, res) => {
         const user = await UserModel.findOne({ email: email });
         if (user && await user.comparePassword(password)) {
           res.status(200).json({id: user.id});
-          logToFile(`User ${email} logged in successfully!`)
-          // mqttClient.publish('leaderboard', JSON.stringify(`New user logged in: ${email}`));
+          const currentTime = new Date().toLocaleTimeString();
+          logToFile(`User ${email} logged in successfully at ${currentTime}!`)
+          mqttClient.publish('active-users', JSON.stringify({userId: user.id, userName: user.name, currentTime}));
         } else {
           res.status(401).json("Wrong password!");
         }

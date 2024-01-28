@@ -193,7 +193,7 @@ const UpdateQuizForm = ({ quizId }) => {
             <button
               type="button"
               onClick={() => handleRemoveQuestion(index)}
-              className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center h-10"
+             className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center h-10"
             >
               Remove Question
             </button>
