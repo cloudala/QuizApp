@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { UserContext } from "../contexts/UserContext";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import EmojiPicker from "./EmojiReactionPicker";
 
 const QuizDetails = ({ quiz, userId, updateUser }) => {
+  const {user} = useContext(UserContext)
   const [quizResult, setQuizResult] = useState(null)
   const initialValues = quiz.questions.reduce((acc, question) => {
     acc[question.id] = "";
@@ -54,6 +57,7 @@ const QuizDetails = ({ quiz, userId, updateUser }) => {
 
   return (
     <div className="max-w-lg mx-auto mt-8 p-4 bg-white rounded-md shadow-md">
+      <EmojiPicker user={user} quizTitle={quiz.title}/>
       <h1 className="text-2xl font-semibold mb-4">Welcome to {quiz.title}</h1>
       <form onSubmit={formik.handleSubmit}>
         {quiz.questions.map((question) => (

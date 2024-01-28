@@ -14,9 +14,9 @@ export default function UserReactionNotification() {
 
     mqttClient.on('message', (topic, message) => {
       if (topic === 'user-reactions') {
-        console.log('Received user reaction:', JSON.parse(message.toString()));
-        const emojiUrl = JSON.parse(message.toString());
-        toast.info(<ToastContent emojiUrl={emojiUrl}/>, {
+        const { emojiCode, user, quizTitle } = JSON.parse(message.toString());
+        console.log('Received user reaction:', emojiCode, user, quizTitle);
+        toast.info(<ToastContent emojiUrl={emojiCode} user={user} quizTitle={quizTitle}/>, {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -25,8 +25,7 @@ export default function UserReactionNotification() {
           draggable: true,
           progress: undefined,
           theme: "light",
-          transition: Bounce,
-          body: <img alt="Emoji" style={{ width: '30px' }} src={emojiUrl} />,
+          transition: Bounce
         });
       }
     });

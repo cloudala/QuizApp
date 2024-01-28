@@ -13,8 +13,6 @@ export default function Navbar() {
           <Link to="/register" className="text-white">Register</Link>
           <Link to="/" className="text-white">Login</Link>
           <Link to="/leaderboard" className="text-white">Leaderboard</Link>
-          <Link to="/reactions" className="text-white">Reactions</Link>
-          <Link to="/reactions-notif" className="text-white">Notifications</Link>
         </div>
       </div>
     </nav>
