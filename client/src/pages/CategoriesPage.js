@@ -15,7 +15,7 @@ export default function CategoriesPage() {
           ) : !error ? (
             <>
             <div>
-              <h1 className='text-2xl font-semibold my-5 mx-3'>Add Category</h1>
+              <h1 className='text-2xl font-semibold mt-5 mx-3'>Add Category</h1>
               <AddCategoryForm/>
             </div>
             <div>
