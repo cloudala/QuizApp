@@ -16,6 +16,7 @@ import {Routes, Route} from 'react-router-dom'
 export default function App() {
   const [activeUsers, setActiveUsers] = useState([]);
   const [leaderboard, setLeaderboard] = useState([]);
+  const [randomFact, setRandomFact] = useState(null);
 
   const updateActiveUsers = (prevActiveUsers, userUpdate) => {
     const updatedActiveUsers = [...prevActiveUsers];
@@ -73,6 +74,8 @@ export default function App() {
       mqttClient.subscribe('active-users');
       mqttClient.subscribe('user-reactions');
       mqttClient.subscribe('quiz-updates');
+      mqttClient.subscribe('random-fact');
+      mqttClient.publish('random-fact', JSON.stringify('ready'))
     });
 
     mqttClient.on('message', (topic, message) => {
@@ -120,6 +123,15 @@ export default function App() {
           transition: Bounce,
         });
       }
+
+      if (topic === 'random-fact') {
+        console.log("Received random fact:", message.toString());
+        const newRandomFact = JSON.parse(message.toString());
+        if (newRandomFact !== 'ready') {
+          console.log(newRandomFact)
+          setRandomFact(newRandomFact)
+        }
+      }
     });
 
     return () => {
@@ -133,7 +145,7 @@ export default function App() {
         <Route path='/' element={<LoginForm/>}/>
         <Route path='/register' element={<SignUpForm/>}/>
         <Route path='/categories' element={<CategoriesPage/>}/>
-        <Route path='/quizzes' element={<HomePage leaderboard={leaderboard} updateLeaderboard={updateLeaderboard} activeUsers={activeUsers} updateActiveUsers={updateActiveUsers}/>}/>
+        <Route path='/quizzes' element={<HomePage leaderboard={leaderboard} updateLeaderboard={updateLeaderboard} activeUsers={activeUsers} updateActiveUsers={updateActiveUsers} randomFact={randomFact}/>}/>
         <Route path='/quizzes/:id' element={<QuizPage/>}/>
         <Route path='/quizzes/manage' element={<ManageQuizPage/>}/>
         <Route path='/quizzes/manage/:id' element={<EditQuizPage/>}/>
