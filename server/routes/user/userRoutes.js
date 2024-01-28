@@ -25,7 +25,6 @@ router.post('/api/register', async (req, res) => {
       });
       await user.save();
       logToFile(`User ${req.body.name} created successfully!`)
-      // mqttClient.publish('leaderboard', JSON.stringify(`New user signed up: ${req.body.name}`));
       res.status(201).json(user);
     } catch (error) {
       console.error('Error during registration:', error);

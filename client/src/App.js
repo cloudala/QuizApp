@@ -33,12 +33,16 @@ export default function App() {
     );
   
     if (existingUserIndex !== -1) {
-      updatedActiveUsers[existingUserIndex].time = userUpdate.time;
+      if (userUpdate.nameChange) {
+        updatedActiveUsers[existingUserIndex].userName = userUpdate.userName;
+      } else {
+        updatedActiveUsers[existingUserIndex].time = userUpdate.currentTime;
+      }
     } else {
       updatedActiveUsers.push({
         userId: userUpdate.userId,
         userName: userUpdate.userName,
-        time: userUpdate.currentTime.toString(),
+        time: userUpdate.currentTime?.toString(),
       });
     }
     return updatedActiveUsers;

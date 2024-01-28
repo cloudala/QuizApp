@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import { UserContext } from '../contexts/UserContext';
 import * as Yup from 'yup';
 import ErrorMessage from './ErrorMessage';
+import mqtt from 'mqtt';
 
 export default function UpdateUserForm({ user }) {
   const {updateUser} = useContext(UserContext)
@@ -38,6 +39,8 @@ export default function UpdateUserForm({ user }) {
             const updatedUserData = await fetch(`https://localhost:4000/api/users/${user.id}`);
             const updatedUser = await updatedUserData.json();
             updateUser(updatedUser);
+            const mqttClient = mqtt.connect('ws://localhost:8000/mqtt');
+            mqttClient.publish('active-users', JSON.stringify({ nameChange: true, userId: user.id, userName: updatedUser.name }));
             console.log('User updated successfully');
         }
       } catch (error) {
