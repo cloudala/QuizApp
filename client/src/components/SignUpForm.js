@@ -49,7 +49,8 @@ export default function SignUpForm() {
   };
 
   return (
-    <form className="max-w-md mx-auto mt-8 p-8 bg-gray-100 rounded" onSubmit={formik.handleSubmit}>
+    <div className='min-h-screen flex flex-column items-center justify-center'>
+    <form className="max-w-md mx-auto p-8 bg-gray-100 rounded w-1/2 -mt-14" onSubmit={formik.handleSubmit}>
       <h1 className='font-semibold text-xl mb-3'>Sign Up</h1>
       <div className="mb-4">
         <input
@@ -103,13 +104,13 @@ export default function SignUpForm() {
         <button
           type="button"
           onClick={handleReset}
-          className="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          className="text-blue-800 bg-blue-100 hover:bg-blue-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center h-10 w-24"
         >
           Reset
         </button>
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
         >
           Sign Up
         </button>
@@ -122,12 +123,12 @@ export default function SignUpForm() {
             <button
             type="button"
             className="text-blue-500 hover:underline focus:outline-none"
-            onClick={() => console.log('Navigate to Login')}
             >
             Login
             </button>
         </Link>
       </div>
     </form>
+    </div>
   );
 }
