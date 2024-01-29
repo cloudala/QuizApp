@@ -66,12 +66,21 @@ export default function AddCategoryForm({category}) {
             <p className="text-red-500 text-sm mt-1">{formik.errors.name}</p>
           )}
         </div>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
-        >
-          Update Category
-        </button>
+        <div className='flex justify-between gap-2'>
+          <button
+            type='button'
+            onClick={formik.handleReset}
+            className='w-36 text-blue-800 bg-blue-100  hover:bg-blue-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center'
+          >
+            Reset
+          </button>
+          <button
+            type='submit'
+            className='w-fit text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center'
+          >
+            Update Category
+          </button>
+        </div>
       </form>
     </div>
   );
