@@ -8,12 +8,14 @@ import UserData from '../components/UserData';
 import ActiveUsers from '../components/ActiveUsers';
 import LeaderBoard from '../components/LeaderBoard';
 import RandomFact from '../components/RandomFact'
+import VisitCount from '../components/VisitCountComponent';
 
 export default function HomePage({leaderboard, updateLeaderboard, activeUsers, updateActiveUsers, randomFact}) {
     const {user, setUser} = useContext(UserContext)
     const { quizzes, loading, error, fetchData } = useContext(QuizContext);
     return (
         <div className='min-h-screen'>
+          <VisitCount/>
           {randomFact && <RandomFact fact={randomFact}/>}
           <ActiveUsers activeUsers={activeUsers} updateActiveUsers={updateActiveUsers}/>
           <LeaderBoard leaderboard={leaderboard} updateLeaderboard={updateLeaderboard}/>

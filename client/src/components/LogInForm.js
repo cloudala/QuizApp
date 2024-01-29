@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 
 export default function LoginForm() {
-  const {user, setUser} = useContext(UserContext)
+  const {user, setUser, incrementVisitCount} = useContext(UserContext)
   const navigate = useNavigate()
   const formik = useFormik({
     initialValues: {
@@ -41,6 +41,7 @@ export default function LoginForm() {
           const userData = await userDataResponse.json();
           console.log(userData)
           setUser(userData)
+          incrementVisitCount(userData)
           console.log('User logged in successfully!')
           navigate('/quizzes')
         }
