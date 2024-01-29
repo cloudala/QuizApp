@@ -9,7 +9,7 @@ export default function VisitCount() {
       {user && (
         <div className="bg-yellow-300 p-4 rounded-md shadow-md">
           <p className="text-2xl font-bold text-gray-800">
-            Welcome, <span className="text-blue-700">{user.name}</span>! Thank you for the {visitCount} visit(s) 🥰!
+            Welcome, <span className="text-blue-700">{user.name}</span>! Thank you and your friends for the {visitCount} visit(s) 🥰!
           </p>
         </div>
       )}

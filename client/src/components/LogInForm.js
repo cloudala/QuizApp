@@ -41,7 +41,7 @@ export default function LoginForm() {
           const userData = await userDataResponse.json();
           console.log(userData)
           setUser(userData)
-          incrementVisitCount(userData)
+          incrementVisitCount()
           console.log('User logged in successfully!')
           navigate('/quizzes')
         }

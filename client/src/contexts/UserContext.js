@@ -8,9 +8,11 @@ export const UserProvider = ({ children }) => {
     const [visitCount, setVisitCount] = useState(0);
 
     useEffect(() => {
-        const storedVisitCount = Cookies.get(`visitCount_${user?.id}`);
-        if (storedVisitCount) {
-          setVisitCount(parseInt(storedVisitCount, 10));
+        if (!user) {
+            const storedVisitCount = Cookies.get(`visitCount`);
+            if (storedVisitCount) {
+                setVisitCount(parseInt(storedVisitCount, 10));
+            }
         }
     }, [user]);
 
@@ -18,10 +20,10 @@ export const UserProvider = ({ children }) => {
         setUser(newUserData);
     };
 
-    const incrementVisitCount = (user) => {
+    const incrementVisitCount = () => {
         setVisitCount((prevCount) => {
             const newCount = prevCount + 1;
-            Cookies.set(`visitCount_${user.id}`, newCount, { expires: 365 });
+            Cookies.set(`visitCount`, newCount, { expires: 365 });
             return newCount;
         });
     };
